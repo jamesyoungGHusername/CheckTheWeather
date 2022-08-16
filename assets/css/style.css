@@ -1,0 +1,30 @@
+header{
+    position: fixed;
+    flex-direction: column;
+    z-index: 9;
+    background-color: lightblue;
+    width: 100%;
+    display: flex;
+    top:0;
+    left: 0;
+    align-items: center;
+    justify-content: space-around;
+}
+main{
+    padding-top: 150px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.UVDisplay{
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
+
+/* @media screen and (min-width: 720px) {
+    Default formatting is mobile layout, 
+    below code swaps from row to column when the page is large enough 
+    main{
+        padding-top: 125px;
+    }
+} */

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <title>Weather?!</title>
+</head>
+<body>
+    <header>
+        <h1>What weather where? </h1>
+        <h3>This world wide website waits on whoever wonders this.</h3>
+    </header>
+    <main> 
+        <div class="row">
+            <div class="col-12 col-md-3">
+                <form>
+                    <div class="form-group">
+                    <label for="formGroupExampleInput">Where will you wander?</label>
+                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Willapa, WA"/>
+                    </div>
+                </form>
+                <div>test div should appear under</div>
+            </div>
+            <div class="cityDisplay col-md-9">
+                <h1 class="cityName">cityNameAndDate</h1>
+                <br>
+                <h4 class="temp">temp: 0.0F</h4>
+                <h4 class="wind">wind: 42mph</h4>
+                <h4 class="humid">humidity: sqrt(-1)%</h4>
+                <div class="UVDisplay">
+                    <h4>UV Index: </h4>
+                    <h5 class="UVColor">0.99</h5>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
