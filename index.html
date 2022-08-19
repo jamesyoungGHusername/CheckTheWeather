@@ -21,31 +21,85 @@
             <div class="col-12 col-md-3">
                 <form>
                     <div class="form-group">
-                    <label for="formGroupExampleInput">Where will you wander?</label>
-                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Willapa, WA"/>
+                    <label for="cityInput">Where will you wander?</label>
+                        <input type="text" class="form-control" id="cityInput" placeholder="Willapa, WA"/>
+                        <br>
+                        <button type="submit" class="submit">Submit</button>
                     </div>
                 </form>
-                <div>test div should appear under</div>
+                <div class="didYouMean d-flex flex-column">
+                </div>
             </div>
             <div class="cityDisplay col-md-9">
-                <h1 class="cityName">cityNameAndDate</h1>
+                
                 <br>
-                <h4 class="temp">temp: 0.0F</h4>
-                <h4 class="wind">wind: 42mph</h4>
-                <h4 class="humid">humidity: sqrt(-1)%</h4>
-                <div class="UVDisplay">
-                    <h4>UV Index: </h4>
-                    <h5 class="UVColor">0.99</h5>
+                <div class="current border p-3">
+                    <h1 class="cityName">cityNameAndDate</h1>
+                    <br>
+                    <div class="twhBlock">
+                        <p class="temp">temp: 0.0F</p>
+                        <p class="wind">wind: 42mph</p>
+                        <p class="humid">humidity: sqrt(-1)%</p>
+                    </div>
+                
+                     <div class="UVDisplay">
+                        <h4>UV Index: </h4>
+                        <h5 class="UVColor">0.99</h5>
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-2">test</div>
-                    <div class="col-2">test</div>
-                    <div class="col-2">test</div>
-                    <div class="col-2">test</div>
-                    <div class="col-2">test</div>
+                <br>
+                <div class="row gx-5 fiveDayDisplay d-flex justify-content-around">
+                    <div class="col-2 p-3 border fiveday">
+                        <h4 class="date">date</h4>
+                        <div class="twhBlock">
+                            <p class="temp">temp: 0.0F</p>
+                            <p class="wind">wind: 42mph</p>
+                            <p class="humid">humidity: sqrt(-1)%</p>
+                        </div>
+                    </div>
+                    <div class="col-2 p-3 border fiveday">
+                        <h4 class="date">date</h4>
+                        <div class="twhBlock">
+                            <p class="temp">temp: 0.0F</p>
+                            <p class="wind">wind: 42mph</p>
+                            <p class="humid">humidity: sqrt(-1)%</p>
+                        </div>
+                    </div>
+                    <div class="col-2 p-3 border fiveday">
+                        <h4 class="date">date</h4>
+                        <div class="twhBlock">
+                            <p class="temp">temp: 0.0F</p>
+                            <p class="wind">wind: 42mph</p>
+                            <p class="humid">humidity: sqrt(-1)%</p>
+                        </div>
+                    </div>
+                    <div class="col-2 p-3 border fiveday">
+                        <h4 class="date">date</h4>
+                        <div class="twhBlock">
+                            <p class="temp">temp: 0.0F</p>
+                            <p class="wind">wind: 42mph</p>
+                            <p class="humid">humidity: sqrt(-1)%</p>
+                        </div>
+                    </div>
+                    <div class="col-2 p-3 border fiveday">
+                        <h4 class="date">date</h4>
+                        <div class="twhBlock">
+                            <p class="temp">temp: 0.0F</p>
+                            <p class="wind">wind: 42mph</p>
+                            <p class="humid">humidity: sqrt(-1)%</p>
+                        </div>
+                    </div>
+                    
+                </div>
+                <br>
+                <h6>Recents:</h6>
+                <div class="row recents border p-2">
+
                 </div>
             </div>
         </div>
     </main>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="./assets/js/script.js"></script>
 </body>
 </html>

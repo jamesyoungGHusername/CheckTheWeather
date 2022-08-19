@@ -21,6 +21,14 @@ main{
     align-items: baseline;
 }
 
+.fiveday{
+    background-color: grey;
+}
+
+.recentSelection{
+    background-color: lightblue;
+}
+
 /* @media screen and (min-width: 720px) {
     Default formatting is mobile layout, 
     below code swaps from row to column when the page is large enough 
