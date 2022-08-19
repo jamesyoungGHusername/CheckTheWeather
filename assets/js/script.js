@@ -88,7 +88,10 @@ function handleButtonPressFor(city){
     removeAllChildNodes(suggestionBox);
     console.log(city.name+" selected");
     addToRecents(city);
-    makeWeatherCallFor(city);
+    $(".cityName").text(city.name+", "+city.state+"   ("+new Date().toDateString()+")");
+    //makeWeatherCallFor(city);
+    makeCurrentUVCallFor(city);
+    makeCurrentWeatherCallFor(city);
 }
 
 //Makes the actual weather call for the selected city (cityProfile as a param).
@@ -97,11 +100,55 @@ function makeWeatherCallFor(suggestion){
     var request = "http://api.openweathermap.org/data/2.5/forecast?lat="+suggestion.lat+"&lon="+suggestion.lon+"&units=imperial&appid="+key;
     fetch(request)
     .then(function(response){
-        console.log("5 day heard");
         return response.json();
     }).then(function(response){
         console.log(response);
     });
+}
+
+function makeCurrentWeatherCallFor(suggestion){
+    var request = "https://api.openweathermap.org/data/2.5/weather?lat="+suggestion.lat+"&lon="+suggestion.lon+"&units=imperial&appid="+key;
+    fetch(request)
+    .then(function(response){
+        return response.json();
+    }).then(function(response){
+        console.log(response);
+        updateCurrentWeatherDisplay(response);
+    });
+}
+
+function makeCurrentUVCallFor(suggestion){
+    var lat = suggestion.lat;
+    var lng = suggestion.lng;
+
+ $.ajax({
+    type: 'GET',
+    dataType: 'json',
+    beforeSend: function(request) {
+      request.setRequestHeader('x-access-token', 'f7cc28cb11d40381c52e45c934deed2a');
+    },
+    url: 'https://api.openuv.io/api/v1/uv?lat=' + lat + '&lng=' + lng,
+    success: function(response) {
+      console.log(response);
+      updateCurrentUVDisplay(response);
+    },
+    error: function(response) {
+      console.log("error occoured. "+response);
+    }
+  });
+
+}
+
+//updates the current weather display for the specified area using a json response from the api
+function updateCurrentWeatherDisplay(using){
+    $(".currentWeather").text("Weather: "+using.weather[0].description);
+    $(".currentTemp").text("temp: "+using.main.temp+"F");
+    $(".currentWind").text("wind: "+using.wind.speed+"mph");
+    $(".currentHumid").text("humidity: "+using.main.humidity+"%");
+}
+
+function updateCurrentUVDisplay(newUV){
+    console.log(newUV.uv);
 }
 
 //adds the param cityProfile object to the list of recent searches, and pops the last element (FIFO) if more than 5 searches have occoured in the past. Also, checks for duplicate entries.
@@ -186,6 +233,4 @@ class dayForecast{
         this.dailyHigh=0;
         this.dailyLow=0;
     }
-
-
 }
