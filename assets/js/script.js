@@ -94,7 +94,7 @@ function handleButtonPressFor(city){
 //Makes the actual weather call for the selected city (cityProfile as a param).
 function makeWeatherCallFor(suggestion){
     //Specifies the https because of chrome's CORS policy.
-    var request = "http://api.openweathermap.org/data/2.5/forecast?lat="+suggestion.lat+"&lon="+suggestion.lon+"&units=standard&appid="+key;
+    var request = "http://api.openweathermap.org/data/2.5/forecast?lat="+suggestion.lat+"&lon="+suggestion.lon+"&units=imperial&appid="+key;
     fetch(request)
     .then(function(response){
         console.log("5 day heard");
