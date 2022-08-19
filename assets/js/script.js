@@ -104,11 +104,22 @@ function makeWeatherCallFor(suggestion){
     });
 }
 
-//adds the param cityProfile object to the list of recent searches, and pops the last element (FIFO) if more than 5 searches have occoured in the past.
+//adds the param cityProfile object to the list of recent searches, and pops the last element (FIFO) if more than 5 searches have occoured in the past. Also, checks for duplicate entries.
 function addToRecents(city){
-    if(recentArr.length>=5){
-        recentArr.shift(city);
-    }else{
+    var match=false;
+    if(recentArr){
+        for(var i=0;i<recentArr.length;i++){
+            if(city.name==recentArr[i].name && city.state==recentArr[i].state){
+                match=true;
+
+                console.log("matches existing value");
+            }
+        }
+    }
+    if(!match){
+        if(recentArr.length>=5){
+            recentArr.shift();
+        }
         recentArr.push(city);
     }
     console.log("Saving "+city.name+" to local");
@@ -128,6 +139,9 @@ function loadRecents(){
             console.log(genericArr[i]);
             //JS doesn't like casting, so the function reconstructs the cityProfile object from the array saved to local.
             recentArr.push(new cityProfile(genericArr[i].name,genericArr[i].state,genericArr[i].lat,genericArr[i].lon,genericArr[i].countryCode));
+            
+        }
+        for (var i = (recentArr.length-1);i>=0;i--){
             recentsDOM.appendChild(recentArr[i].getElementForSelf().get(0));
         }
     }
