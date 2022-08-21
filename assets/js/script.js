@@ -82,6 +82,75 @@ class cityProfile{
     }
 
 }
+//Contains information regarding a particular 3-hour snapshot
+class forecastSnapshot{
+    constructor(city,country,apiForecastObject){
+        this.date=new Date(apiForecastObject.dt_txt);
+        this.cityName=city;
+        this.country=country;
+        this.temperature=apiForecastObject.main.temp;
+        this.humidity=apiForecastObject.main.humidity;
+        this.weather=apiForecastObject.weather[0].main;
+        console.log(apiForecastObject.wind.speed);
+        this.windSpeed=apiForecastObject.wind.speed;
+        this.weatherDescrip=apiForecastObject.weather[0].description;
+    }
+}
+
+class multiDayForecast{
+    //takes array of dayForecast objects
+    constructor(days){
+        this.days=days;
+    }
+    addDay(day){
+        this.days.push(day);
+    }
+}
+
+class dayForecast{
+    constructor(date,snapshots){
+        this.date=date;
+        //NEEDED TO COPY THE PARAM ARRAY. Couldn't risk storing a reference something that was going to change.
+        this.snapshots=[...snapshots];
+        //National Weather Service uses local midnight-to-midnight for both daily high and low temps.
+        this.dailyHigh=this.snapshots[0].temperature;
+        this.dailyLow=this.snapshots[0].temperature;
+    }
+
+    calculateHigh(){
+        for(var i=0;i<this.snapshots.length;i++){
+            if(this.dailyHigh<this.snapshots[i].temperature){
+                this.dailyHigh=this.snapshots[i].temperature;
+            }
+        }
+        console.log("high for "+this.date+" is "+this.dailyHigh);
+    }
+    calculateLow(){
+        for(var i=0;i<this.snapshots.length;i++){
+            if(this.dailyLow>this.snapshots[i].temperature){
+                this.dailyLow=this.snapshots[i].temperature;
+            }
+        }
+        console.log("low for "+this.date+" is "+this.dailyLow);
+    }
+
+    returnAvgHumid(){
+        var avg=0;
+        for(var i=0;i<this.snapshots.length;i++){
+            avg+=this.snapshots[i].humidity;
+        }
+        avg=avg/(this.snapshots.length);
+        return avg;
+    }
+    returnAvgWindSpd(){
+        var avg=0;
+        for(var i=0;i<this.snapshots.length;i++){
+            avg+=this.snapshots[i].windSpeed;
+        }
+        avg=avg/(this.snapshots.length);
+        return avg;
+    }
+}
 
 //Eventhandler function takes cityProfile as a param.
 function handleButtonPressFor(city){
@@ -89,12 +158,13 @@ function handleButtonPressFor(city){
     console.log(city.name+" selected");
     addToRecents(city);
     $(".cityName").text(city.name+", "+city.state+"   ("+new Date().toDateString()+")");
-    //makeWeatherCallFor(city);
-    makeCurrentUVCallFor(city);
+    makeWeatherCallFor(city);
+    //makeCurrentUVCallFor(city);
     makeCurrentWeatherCallFor(city);
 }
 
-//Makes the actual weather call for the selected city (cityProfile as a param).
+var fiveDayForecast=new multiDayForecast([]);
+//Makes a weather forecast call, cityProfile param.
 function makeWeatherCallFor(suggestion){
     //Specifies the https because of chrome's CORS policy.
     var request = "http://api.openweathermap.org/data/2.5/forecast?lat="+suggestion.lat+"&lon="+suggestion.lon+"&units=imperial&appid="+key;
@@ -102,10 +172,53 @@ function makeWeatherCallFor(suggestion){
     .then(function(response){
         return response.json();
     }).then(function(response){
-        console.log(response);
+        //console.log(response);
+        //api returns 5 snapshot forecasts per day, to get daily highs they have to be loaded.
+        var currentDate=new Date(response.list[0].dt_txt);
+        var dateToCheck=new Date(response.list[0].dt_txt);
+        //console.log(currentDate);
+        //console.log(dateToCheck);
+        var snapShots=[];
+        for(var i=0;i<response.list.length;i++){
+            dateToCheck=new Date(response.list[i].dt_txt);
+            console.log(response.list[i]);
+            if(dateToCheck.getDay()==currentDate.getDay()){
+                //console.log("same day")
+                snapShots.push(new forecastSnapshot(response.city.name,response.city.country,response.list[i]))
+            }else{
+                //Adds new day (dayForecast constructor copies snapshots instead of storing a reference)
+                fiveDayForecast.addDay(new dayForecast(currentDate,snapShots))
+                //updates date
+                currentDate = new Date(response.list[i].dt_txt);
+                //clears snapshots.
+                snapShots = [];
+            }
+        }
+        console.log(fiveDayForecast);
+        for(var i=0;i<fiveDayForecast.days.length;i++){
+            fiveDayForecast.days[i].calculateHigh();
+            fiveDayForecast.days[i].calculateLow();
+            fiveDayDisplay.appendChild(generateDayForecast(fiveDayForecast.days[i]).get(0));  
+        }
     });
 }
 
+
+function generateDayForecast(dayForecastObject){
+    var border = $("<div>",{"class":"col-2 p-3 border fiveday"});
+    var date = $("<h4>",{"class":"date"}).text(dayForecastObject.date.toDateString());
+    var block = $("<div>",{"class":"twhBlock"});
+    var highTemp=$("<p>",{"class":"temp"}).text("high temp: "+dayForecastObject.dailyHigh+"F");
+    var lowTemp=$("<p>",{"class":"temp"}).text("low temp: "+dayForecastObject.dailyLow+"F");
+    var wind=$("<p>",{"class":"wind"}).text("wind: "+dayForecastObject.returnAvgWindSpd().toFixed(2)+"mph");
+    var humid=$("<p>",{"class":"humid"}).text("humidity: "+dayForecastObject.returnAvgHumid().toFixed(2)+"%");
+    block.append(highTemp,lowTemp,wind,humid);
+    border.append(date,block);
+    return border;
+}
+
+
+//Makes the actual weather call for the selected city (cityProfile as a param).
 function makeCurrentWeatherCallFor(suggestion){
     var request = "https://api.openweathermap.org/data/2.5/weather?lat="+suggestion.lat+"&lon="+suggestion.lon+"&units=imperial&appid="+key;
     fetch(request)
@@ -211,26 +324,4 @@ function returnWeatherInfoElmtFor(day){
     block.append(temp,wind,humid);
     col.append(block);
     return col;
-}
-
-//Contains information regarding a particular 3-hour snapshot
-class forecastSnapshot{
-    constructor(apiForecastObject){
-        this.date=apiForecastObject.list.dt_text;
-        this.cityName=apiForecastObject.city.name;
-        this.country=apiForecastObject.city.country;
-        this.temperature=apiForecastObject.list.main.temp;
-        this.weather=apiForecastObject.list.weather.id;
-        this.weatherDescrip=apiForecastObject.list.weather.description;
-    }
-}
-
-class dayForecast{
-    constructor(date,snapshots){
-        this.date=date;
-        this.snapshots=snapshots;
-        //National Weather Service uses local midnight-to-midnight for both daily high and low temps.
-        this.dailyHigh=0;
-        this.dailyLow=0;
-    }
 }
