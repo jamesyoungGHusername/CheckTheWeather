@@ -292,7 +292,7 @@ function addToRecents(city){
 function loadRecents(){
     removeAllChildNodes(recentsDOM);
     var genericArr=JSON.parse(localStorage.getItem("recentArr"));
-    console.log("Loaded: "+genericArr.length);
+    //console.log("Loaded: "+genericArr.length);
     if(genericArr){
         recentArr=[];
         for(var i=0;i<genericArr.length;i++){
