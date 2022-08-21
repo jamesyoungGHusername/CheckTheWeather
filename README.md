@@ -14,10 +14,14 @@ this is deployed on github pages, and the repo is publicly available.
 
 * [github repo here](https://github.com/jamesyoungGHusername/CheckTheWeather)
 
-* [github pages deployment here]()
+* [github pages deployment here](https://jamesyoungghusername.github.io/CheckTheWeather/)
 
 ## Usage
 The city search accounts for inaccurate user input, and suggests options they might have meant. After the user selects a specific city the app saves it to local storage as a recent search, and queries the OPENWEATHERMAP api twice, once for the current weather, and once for the five day forecast. The current weather is displayed directly (omitting the UV index because that data costs 400$ per month), but the five day forecast is returned as 40 3-hour chunks, so that data needs to be processed before it can be displayed.
+
+![suggestions](./assets/images/Screen%20Shot%202022-08-19%20at%2012.39.25%20AM.png)
+
+![full page](./assets//images/Screenshot%202022-08-21%20003305.png)
 
 It's processed by first sorting the responses by date, then by calculating the daily high and low temps (The national weather service uses a simple midnight to midnight for this, so that's what I've used too, even though some other authorities suggest alternate approaches), and it calculates the average wind speed and humidity values for the day.
 
