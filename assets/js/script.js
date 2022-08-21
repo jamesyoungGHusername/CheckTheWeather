@@ -27,7 +27,7 @@ var key="59891e16893aba6e28c892ab4a79de12";
 function callGeocode(location){
     suggestions=[];
     console.log("Calling weather api for "+location);
-    fetch("http://api.openweathermap.org/geo/1.0/direct?q="+location+"&limit=5&appid="+key)
+    fetch("https://api.openweathermap.org/geo/1.0/direct?q="+location+"&limit=5&appid="+key)
     .then(function(response){
         console.log("Obtained response");
         return response.json();
@@ -167,7 +167,7 @@ var fiveDayForecast=new multiDayForecast([]);
 //Makes a weather forecast call, cityProfile param.
 function makeWeatherCallFor(suggestion){
     //Specifies the https because of chrome's CORS policy.
-    var request = "http://api.openweathermap.org/data/2.5/forecast?lat="+suggestion.lat+"&lon="+suggestion.lon+"&units=imperial&appid="+key;
+    var request = "https://api.openweathermap.org/data/2.5/forecast?lat="+suggestion.lat+"&lon="+suggestion.lon+"&units=imperial&appid="+key;
     fetch(request)
     .then(function(response){
         return response.json();
